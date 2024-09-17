@@ -1,0 +1,19 @@
+# Ignore __pycache__ folder
+__pycache__/
+
+# Ignore log files
+*.log
+
+# Ignore build folder
+build/
+logs/
+myenv/
+
+# Ignore other temporary files and directories (optional)
+*.tmp
+*.temp
+*.vscode
+*.ropeproject
+
+# Ignore files
+test.__pycache__
