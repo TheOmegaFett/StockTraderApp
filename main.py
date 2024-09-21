@@ -8,8 +8,6 @@ from lumibot.brokers import Alpaca
 from lumibot.traders import Trader
 from strategy import Strategy
 import multiprocessing
-import signal
-import threading
 
 def run_backtest(params):
     start, end, budget = params
@@ -52,18 +50,6 @@ if __name__ == "__main__":
             
               """)
             
-    print("""   
-            
-          \033[31m        © 2024 Shane W Miller
-          \033[31m        All rights reserved.
-
-          \033[31m        This software is provided for personal use only.
-          \033[31m        Modification, distribution, or commercial use is
-          \033[31m        prohibited without prior written permission from 
-          \033[31m        the copyright holder.
-          \033[0m 
-              """)
-
     print("\033[32m\n\nPress any key to continue...\033[0m\n\n")
     input()
 
@@ -84,33 +70,27 @@ if __name__ == "__main__":
                 else:
                     continue
             case '2':
-                start1 = datetime(2024, 2, 1)
-                end1 = datetime(2024, 2, 7)
-                start2 = datetime(2023, 2, 1)
-                end2 = datetime(2023, 2, 7)
+                start1 = datetime(2024, 1, 1)
+                end1 = datetime(2024, 4, 14)
+                
 
-                backtest_params = [
-                    (start1, end1, 350),
-                    (start2, end2, 350)
-                    ]
+                backtest_params = [start1, end1, 350]
+                    
 
-                with multiprocessing.Pool() as pool:
-                    pool.map(run_backtest, backtest_params)
+                run_backtest(backtest_params)
 
-                print("Both backtests have completed.")
-                print("\033[32m\n\nPress any key to continue...\033[0m\n\n")
+                print("Backtests has completed.")
+                print("\033[32m\n\nPress Enter to continue...\033[0m\n\n")
                 input()
                     
             case '3':
                 print("Edit Trading Strategy Parameters")
-                print("\033[32m\n\nPress any key to continue...\033[0m\n\n")
+                print("\033[32m\n\nPress Enter to continue...\033[0m\n\n")
                 input()
             case '4':
                 print("Exiting...")
-                print("\033[32m\n\nPress any key to continue...\033[0m\n\n")
-                input()
                 exit()
             case _:
                 print("Invalid input. Please enter a valid selection.")
-                user_input = input("Enter your selection then press enter: ")
+                user_input = input("Type your selection then press enter: ")
 

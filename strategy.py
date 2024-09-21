@@ -24,7 +24,6 @@ class Strategy(BaseStrategy):
         
     def on_trading_iteration(self):
         for symbol in self.symbols:
-            print(symbol)
             if symbol is None:
                 print("No symbol provided for this trading iteration.")
                 return
@@ -104,7 +103,7 @@ class Strategy(BaseStrategy):
         position = self.get_position(symbol)
         
         
-        buy_condition = (position is None) and (short_ma > long_ma)
+        buy_condition = (position is None) and ((short_ma > long_ma) or (rsi < 30))
 
         if buy_condition:
             shares_to_trade = self.calculate_shares_to_buy(current_price)
@@ -118,19 +117,20 @@ class Strategy(BaseStrategy):
             buy_price = self.buy_prices[symbol]
             highest_price = self.highest_prices.get(symbol, buy_price)
 
-            if current_price > buy_price + 0.0004:
-                self.sell_percentage(symbol, 0.75)
-
+            if current_price > buy_price + 0.04:
+                self.sell_all()
+                self.buy_prices.pop(symbol, None)
             if current_price > buy_price + 0.0001:
                 if short_ma < long_ma or rsi > 60:
-                    self.sell_percentage(symbol, .25)
-                
+                    self.sell_all(symbol)
+                    self.buy_prices.pop(symbol, None)
+                    
 
-            trailing_stop_loss = 0.04
+            trailing_stop_loss = 0.01
             stop_loss_price = highest_price * (1 - trailing_stop_loss)
 
             if current_price < stop_loss_price:
                 self.sell_all(symbol)
-
+                
             self.highest_prices[symbol] = max(highest_price, current_price)
             
