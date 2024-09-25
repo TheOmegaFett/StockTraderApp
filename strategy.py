@@ -6,8 +6,8 @@ import numpy as np
 class Strategy(BaseStrategy):
 
         
-    def initialize(self):
-        self.sleeptime = '30S'   # 5 Minutes between each iteration
+    def initialize(self,sleeptime="30S", maximum_shares_to_trade=500, short_ma_window = 10, long_ma_window = 20, maximum_percentage_to_buy = .3):
+        self.sleeptime = sleeptime   
         self.symbols = [
                     "AAPL", # Apple
                     "TSLA", # Tesla
@@ -16,11 +16,12 @@ class Strategy(BaseStrategy):
                     "MSFT", # Microsoft
                     "GOOG", # Google
                         ]
-        self.maximum_shares_to_trade = 2500    # The maximum number of shares per buy trade
+        self.maximum_shares_to_trade = maximum_shares_to_trade
         self.highest_prices = {}    # A dictionary to store the highest price for each symbol
         self.buy_prices = {}    # A dictionary to store the buy price for each symbol
-        
-        
+        self.short_ma_window = short_ma_window
+        self.long_ma_window = long_ma_window
+        self.maximum_percentage_to_buy = maximum_percentage_to_buy
         
     def on_trading_iteration(self):
         for symbol in self.symbols:
@@ -65,12 +66,12 @@ class Strategy(BaseStrategy):
         close_prices = bars.df['close'].values
         return talib.RSI(close_prices, timeperiod=period)[-1]
 
-    def calculate_shares_to_buy(self, current_price, max_percentage=0.30):
+    def calculate_shares_to_buy(self, current_price, max_percentage):
     
         balance = self.get_cash()
         if balance <= 0:
             return 0
-        allocation =   min(int(balance * max_percentage), 6000) 
+        allocation =   int(balance * max_percentage) 
         if allocation <= current_price or current_price == 0:
             return 0
         num_of_shares = int(allocation / current_price)
@@ -87,8 +88,8 @@ class Strategy(BaseStrategy):
         if current_price is None:
             return
 
-        short_ma = self.get_moving_average(symbol, 2)
-        long_ma = self.get_moving_average(symbol, 7)
+        short_ma = self.get_moving_average(symbol, self.short_ma_window)
+        long_ma = self.get_moving_average(symbol, self.long_ma_window)
         
         if short_ma is None or long_ma is None:
             print(f"Could not calculate moving averages for {symbol}")
@@ -103,10 +104,10 @@ class Strategy(BaseStrategy):
         position = self.get_position(symbol)
         
         
-        buy_condition = (position is None) and ((short_ma > long_ma) or (rsi < 30))
+        buy_condition = (position is None) and ((short_ma > long_ma) or (rsi < 30)) and not rsi >63 
 
         if buy_condition:
-            shares_to_trade = self.calculate_shares_to_buy(current_price)
+            shares_to_trade = self.calculate_shares_to_buy(current_price, self.maximum_percentage_to_buy)
             if shares_to_trade >= 1:
                 buy_order = self.create_order(symbol, shares_to_trade, "buy")
                 self.submit_order(buy_order)
@@ -118,7 +119,7 @@ class Strategy(BaseStrategy):
             highest_price = self.highest_prices.get(symbol, buy_price)
 
             if current_price > buy_price + 0.04:
-                self.sell_all()
+                self.sell_all(symbol)
                 self.buy_prices.pop(symbol, None)
             if current_price > buy_price + 0.0001:
                 if short_ma < long_ma or rsi > 60:
@@ -126,11 +127,11 @@ class Strategy(BaseStrategy):
                     self.buy_prices.pop(symbol, None)
                     
 
-            trailing_stop_loss = 0.01
+            trailing_stop_loss = 0.001
             stop_loss_price = highest_price * (1 - trailing_stop_loss)
 
             if current_price < stop_loss_price:
                 self.sell_all(symbol)
-                
+                self.buy_prices.pop(symbol, None)
             self.highest_prices[symbol] = max(highest_price, current_price)
             

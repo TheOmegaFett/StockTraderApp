@@ -16,7 +16,7 @@ The app is a command-line interface (CLI) application designed to manage stock t
        - Save changes and exit the menu.
      - **Backtest Menu**:
        - View a log of previous backtest results.
-       - Perform one or multiple backtests (repeatable).
+       - Perform backtest.
        - Save changes and exit the menu.
      - **Exit Application**: Ends the session and exits the app.
 
