@@ -1,5 +1,4 @@
 from lumibot.strategies import Strategy as BaseStrategy
-
 import talib
 import numpy as np
 
