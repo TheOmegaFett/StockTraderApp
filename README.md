@@ -1,58 +1,112 @@
-### App Description
+# Trading Strategy Backtest Project
 
-The app is a command-line interface (CLI) application designed to manage stock trading strategies. It allows users to achieve three main objectives: run a stock trading strategy live, backtest one or more strategies, and configure parameters for each strategy. This tool is built to facilitate both live trading and historical backtesting while offering flexibility in strategy customization and management.
+## Overview
 
-### Features and Functionalities
+This project performs algorithmic trading backtests using a custom strategy implemented in Python. The core components include:
 
-1. **Strategy and Backtest Initialization**:
-   - Instantiates a list of strategies and backtests from a `Config.json` file or loads a default state if no configuration is found.
-2. **Title Screen and Main Menu**:
-   - Users can navigate through the following options:
-     - **Run Live**: Initiates a live session for the selected strategy.
-     - **Strategies Menu**:
-       - View a list of saved strategies.
-       - Add a new strategy by specifying its parameters.
-       - Remove an existing strategy.
-       - Save changes and exit the menu.
-     - **Backtest Menu**:
-       - View a log of previous backtest results.
-       - Perform backtest.
-       - Save changes and exit the menu.
-     - **Exit Application**: Ends the session and exits the app.
+### Files Overview
 
-### Entities and Classes
+- **main.py**: This is the entry point of the application. It initializes and coordinates the backtesting process, calling the necessary methods and modules from other files. Contains StockTrader class and handles user interactions and manages the overall application flow.
 
-1. **TradingApp Class**:
+- **strategy.py**: This file defines the custom trading strategy. It includes the logic for entering and exiting trades based on technical indicators, such as moving averages or relative strength index (RSI).
 
-   - Manages the overall application workflow.
-   - **Attributes**:
-     - `Backtest list`: Stores instances of the `Backtest` class.
-     - `Strategies dictionary`: Stores different strategies with customizable parameters.
-     - `Previous Balance value`: Keeps track of the user's balance before the live trading session.
-     - `Live Session Profit/Loss value`: Tracks profit or loss during the live session.
+- **backtest.py**: This file contains the logic to run backtests on various trading strategies. It uses historical market data to evaluate the performance of strategies over time.
 
-2. **Backtest Class**:
+## Installation
 
-   - Represents the execution of a historical backtest for a specific strategy.
-   - **Attributes**:
-     - `Strategy value`: The strategy used for the backtest.
-     - `Results URL value`: A URL for detailed backtest results, possibly hosted.
-     - `Start Date value`: The start date for the backtest period.
-     - `End Date value`: The end date for the backtest period.
-     - `Starting Balance value`: The balance at the beginning of the backtest.
-     - `Final Balance value`: The balance after the backtest is complete.
+### Prerequisites
 
-3. **Strategy Class**:
+- **Python**: Ensure you have Python 3.8+ installed. You can download it [here](https://www.python.org/downloads/).
+- **pip**: Python's package installer.
 
-   - Represents a stock trading strategy with adjustable parameters.
-   - **Attributes**:
-     - `Time Interval Value`: Time interval for executing trades (e.g., 1-minute, 15-minute).
-     - `RSI value`: Relative Strength Index value for buy/sell signals.
-     - `SMA value`: Short Moving Average value for trend analysis.
-     - `LMA value`: Long Moving Average value for trend analysis.
-     - `Stop Loss value`: The threshold at which a position will be automatically sold to prevent further loss.
-     - `Take Profit value`: The target price at which profits will be realized by selling a position.
+### Python Packages:
 
-4. **Config JSON File**:
-   - Stores default or user-defined settings for strategies and backtests.
-   - Acts as a source for initializing the `Backtest` and `Strategy` lists when the app starts.
+The following Python packages are required to run this project. Each package’s license is provided along with a brief description of how it is used:
+
+1. **`numpy`**
+
+   - **License**: [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause)
+   - **Description**: A fundamental package for numerical computations in Python. Used for matrix operations, calculations, and managing large arrays of market data.
+   - **Ethical Consideration**: The permissive BSD license allows for commercial and non-commercial use of `numpy` with minimal restrictions.
+
+2. **`ta-lib`**
+
+   - **License**: [MIT License](https://opensource.org/licenses/MIT)
+   - **Description**: A technical analysis library used for calculating indicators like moving averages, RSI, MACD, and more. Essential for defining the strategy logic.
+   - **Ethical Consideration**: The MIT License is very permissive, allowing for easy integration into both open-source and commercial projects.
+
+3. **`alpaca-trade-api`**
+
+   - **License**: [MIT License](https://opensource.org/licenses/MIT)
+   - **Description**: A Python client for the Alpaca trading platform. This library facilitates interaction with Alpaca's API to retrieve market data and place simulated or live trades.
+   - **Ethical Consideration**: Users should ensure they comply with Alpaca's terms of service and any applicable financial regulations in their jurisdiction.
+
+4. **`lumibot`**
+
+   - **License**: [MIT License](https://opensource.org/licenses/MIT)
+   - **Description**: A Python-based algorithmic trading framework that simplifies the process of creating and testing strategies using real-time data and backtesting capabilities.
+   - **Ethical Consideration**: As a part of the MIT License, this package allows modification and distribution, making it ideal for custom trading strategies while maintaining openness and flexibility.
+
+5. **`datetime`** (Standard Python Library)
+
+   - **License**: Python Software Foundation License (PSFL)
+   - **Description**: Handles date and time objects in Python, used to manage timestamps and time-based calculations.
+
+6. **`os`** (Standard Python Library)
+   - **License**: Python Software Foundation License (PSFL)
+   - **Description**: Provides a way to interact with the operating system for tasks like reading environment variables, file paths, etc.
+
+## License and Ethical Considerations
+
+### License:
+
+This project is licensed under the **MIT License**. This is a permissive license that allows the following:
+
+- **Usage**: You are free to use, modify, and distribute this software in personal, educational, or commercial projects.
+- **Conditions**: You must retain the original copyright notice and permission notice in all copies or substantial portions of the software.
+
+**Key Points** of the MIT License:
+
+- The project is provided "as is", without any warranty.
+- You are free to make derivative works, but proper attribution must be maintained.
+
+For more details, see the full MIT License [here](https://opensource.org/licenses/MIT).
+
+### Ethical Considerations:
+
+1. **Use of Open-source Libraries**: This project heavily relies on open-source libraries like `numpy` and `TA-Lib`. These libraries are widely adopted in both academia and industry, ensuring transparency, collaboration, and the ability to build upon each other's work. Ethical usage of these libraries involves adhering to their licenses, which are permissive, but it's important to ensure that their authors are credited appropriately.
+
+2. **Data Privacy**: If you are using live trading APIs, such as Alpaca, to gather market data, you should ensure that any sensitive data, such as API keys or user information, is stored securely and in compliance with privacy laws like GDPR.
+
+3. **Algorithmic Trading Risks**: While algorithmic trading can offer significant benefits, it’s crucial to understand and mitigate risks such as market manipulation, regulatory compliance, and fairness in financial markets. Ensure your strategy abides by local financial regulations and avoid unethical practices like spoofing or high-frequency trading that can manipulate market prices.
+
+### Setup Instructions
+
+1. **Clone the Repository:**
+   Open your terminal and clone the repository using Git:
+
+   ```bash
+   git clone https://github.com/TheOmegaFett/StockTraderApp.git
+   cd your-repo
+   ```
+
+2. **Create a Virtual Environment (Optional):**
+   It's recommended to create a virtual environment to isolate project dependencies.
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install Dependencies:**
+   Install the required Python packages using pip:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Run the Application:**
+   Execute the main script to start the application:
+   ```bash
+   python main.py
+   ```
