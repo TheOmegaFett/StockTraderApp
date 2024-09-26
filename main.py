@@ -3,8 +3,8 @@ from config import ALPACA_CONFIG
 from datetime import datetime, timedelta
 from lumibot.brokers import Alpaca
 from lumibot.traders import Trader
-from strategy import Strategy
-from backtest import Backtest
+from Classes.strategy import Strategy
+from Classes.backtest import Backtest
 
 
 class StockTrader():
@@ -31,10 +31,10 @@ class StockTrader():
 
         print(" ___________________________________________________________")
         print("|----------------------- Main Menu -------------------------|")
-        print("| \033[42m\033[37m1. Trade Live on Alpaca Brokerage                         \033[0m|#")
-        print("| \033[42m\033[37m2. Backtest Trading Strategy on Historical Data           \033[0m|#")
-        print("| \033[42m\033[37m3. Edit Trading Strategy Parameters                       \033[0m|#")
-        print("| \033[42m\033[37m4. Exit                                                   \033[0m|#")
+        print("| \033[42m\033[30m1. Trade Live on Alpaca Brokerage                         \033[0m|#")
+        print("| \033[42m\033[30m2. Backtest Trading Strategy on Historical Data           \033[0m|#")
+        print("| \033[42m\033[30m3. Edit Trading Strategy Parameters                       \033[0m|#")
+        print("| \033[42m\033[30m4. Exit                                                   \033[0m|#")
         print("|___________________________________________________________|#")
         print("   ###########################################################")
         print()
