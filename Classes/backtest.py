@@ -1,8 +1,9 @@
 from lumibot.backtesting import YahooDataBacktesting
 
+
 class Backtest:
     
-    def __init__(self, strategy, start_date, end_date, budget):
+    def __init__(self, strategy, start_date, end_date, budget=500):
         
         self.strategy = strategy
         self.start_date = start_date
@@ -11,6 +12,6 @@ class Backtest:
     
   
     def run_backtest(self):
-        self.strategy.backtest(YahooDataBacktesting, self.start_date, self.end_date, budget=self.budget)
+        self.strategy.run_backtest(YahooDataBacktesting, self.start_date, self.end_date, budget=self.budget)
         
        

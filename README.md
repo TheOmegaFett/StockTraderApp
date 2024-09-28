@@ -76,9 +76,9 @@ For more details, see the full MIT License [here](https://opensource.org/license
 
 1. **Use of Open-source Libraries**: This project heavily relies on open-source libraries like `numpy` and `TA-Lib`. These libraries are widely adopted in both academia and industry, ensuring transparency, collaboration, and the ability to build upon each other's work. Ethical usage of these libraries involves adhering to their licenses, which are permissive, but it's important to ensure that their authors are credited appropriately.
 
-2. **Data Privacy**: If you are using live trading APIs, such as Alpaca, to gather market data, you should ensure that any sensitive data, such as API keys or user information, is stored securely and in compliance with privacy laws like GDPR.
+2. **Data Privacy**: Using live trading APIs, such as Alpaca, to gather market data, you must ensure that any sensitive data, such as API keys or user information, is stored securely and in compliance with privacy laws like GDPR. The Keys provided in the repository are for demonstration purposes only and should not be used in production environments.
 
-3. **Algorithmic Trading Risks**: While algorithmic trading can offer significant benefits, it’s crucial to understand and mitigate risks such as market manipulation, regulatory compliance, and fairness in financial markets. Ensure your strategy abides by local financial regulations and avoid unethical practices like spoofing or high-frequency trading that can manipulate market prices.
+3. **Algorithmic Trading Risks**: While algorithmic trading can offer significant benefits, it’s crucial to understand and mitigate risks such as market manipulation, regulatory compliance, and fairness in financial markets. Ensure strategy abides by local financial regulations and avoids unethical practices like spoofing or high-frequency trading that can manipulate market prices.
 
 ### Setup Instructions
 

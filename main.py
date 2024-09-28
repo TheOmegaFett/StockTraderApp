@@ -9,10 +9,11 @@ from Classes.backtest import Backtest
 
 class StockTrader():
 
-    sleeptime="30M"
+    sleeptime="5M"
     maximum_shares_to_trade=500
-    short_ma_window = 10
-    long_ma_window = 20
+    short_ma_window = 1
+    long_ma_window = 3
+    rsi_window = 3
     maximum_percentage_to_buy = .3
 
 
@@ -71,7 +72,7 @@ class StockTrader():
                         if user_input.upper() == "Y":
                             broker = Alpaca(ALPACA_CONFIG)
                             trader = Trader()
-                            strategy = Strategy(broker=broker, sleeptime="30S", maximum_shares_to_trade=500, short_ma_window = 1, long_ma_window = 7, maximum_percentage_to_buy = .3)
+                            strategy = Strategy(broker = broker, sleeptime = StockTrader.sleeptime, maximum_shares_to_trade = StockTrader.maximum_shares_to_trade, short_ma_window = StockTrader.short_ma_window, long_ma_window = StockTrader.long_ma_window, rsi_window = StockTrader.rsi_window, maximum_percentage_to_buy = StockTrader.maximum_percentage_to_buy)
                             trader.add_strategy(strategy)
                             trader.run_all()
                         elif user_input.upper() == "N":
@@ -116,25 +117,26 @@ class StockTrader():
                                 print("Invalid date format. Please use DD/MM/YYYY.")
                                 continue
                             break
-                    
-                        while True:
-                            user_input = input("Enter the budget (e.g. 5000): ")
-                            try:
-                                budget = int(user_input)
-                                if budget < 500:
-                                    print("Budget cannot be less than 500.")
-                                    continue
-                            except ValueError:
-                                print("Invalid budget. Please enter a valid integer.")
-                                continue
-                            break
+                        
+                        # Budget is not working anymore for backtesting, will leave out for now and will continue to investigate.
+                        # while True:
+                        #     user_input = input("Enter the budget (e.g. 5000): ")
+                        #     try:
+                        #         budget = int(user_input)
+                        #         if budget < 500:
+                        #             print("Budget cannot be less than 500.")
+                        #             continue
+                        #     except ValueError:
+                        #         print("Invalid budget. Please enter a valid integer.")
+                        #         continue
+                        #     break
                        
                         
                         broker = Alpaca(ALPACA_CONFIG)
                         
-                        strategy = Strategy(broker=broker, sleeptime="30M", maximum_shares_to_trade=500, short_ma_window = 10, long_ma_window = 20, maximum_percentage_to_buy = .3)
+                        strategy = Strategy(broker = broker, sleeptime = StockTrader.sleeptime, maximum_shares_to_trade = StockTrader.maximum_shares_to_trade, short_ma_window = StockTrader.short_ma_window, long_ma_window = StockTrader.long_ma_window, rsi_window = StockTrader.rsi_window, maximum_percentage_to_buy = StockTrader.maximum_percentage_to_buy)
                         
-                        new_backtest = Backtest(strategy, start_date, end_date, budget)
+                        new_backtest = Backtest(strategy, start_date, end_date, budget=500)
             
                         new_backtest.run_backtest()
 
@@ -149,8 +151,9 @@ class StockTrader():
                             print("2. Maximum shares to trade")
                             print("3. Moving Average Short Window")
                             print("4. Moving Average Long Window")       
-                            print("5. Maximum percentage to buy")
-                            print("6. Exit")
+                            print("5. RSI Window")
+                            print("6. Maximum percentage to buy")
+                            print("7. Exit")
                             print()
                             user_input = input("Type your selection then press enter: ")
                             match user_input:
@@ -219,6 +222,23 @@ class StockTrader():
                                         break
                                 case '5':
                                     while True:
+                                        user_input = input("Enter the RSI period (e.g. 14): ")
+                                        try:
+                                            rsi_period = int(user_input)
+                                            if rsi_period < 1:
+                                                print("RSI period cannot be less than 1.")
+                                                StockTrader.any_key()
+                                                continue
+                                        except ValueError:
+                                            print("Invalid RSI period. Please enter a valid integer.")
+                                            StockTrader.any_key()
+                                            continue
+                                        StockTrader.rsi_period = rsi_period
+                                        print("RSI period changed to: " + user_input)
+                                        StockTrader.any_key()
+                                        break
+                                case '6':
+                                    while True:
                                         user_input = input("Enter the maximum percentage to buy (e.g. 0.3): ")
                                         try:
                                             maximum_percentage_to_buy = float(user_input)
@@ -234,7 +254,7 @@ class StockTrader():
                                         print("Maximum percentage to buy changed to: " + user_input)
                                         StockTrader.any_key()
                                         break
-                                case '6':
+                                case '7':
                                     print("Exiting to main menu...")
                                     StockTrader.any_key()
                                     break
